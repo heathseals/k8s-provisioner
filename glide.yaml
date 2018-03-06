@@ -1,0 +1,6 @@
+package: github.com/charlesdunbar/k8s-provisioner
+import:
+- package: k8s.io/client-go
+  version: v5.0.0
+- package: github.com/jessevdk/go-flags
+  version: ~1.3.0
