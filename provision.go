@@ -61,7 +61,7 @@ func createRoleBinding(clientset *kubernetes.Clientset) {
 	if err != nil {
 		panic(err.Error())
 	}
-	fmt.Printf("Created rolebinding %s-rolebinding in namespace %s", options.Username, options.Namespace)
+	fmt.Printf("Created rolebinding %s-rolebinding in namespace %s\n", options.Username, options.Namespace)
 }
 
 func main() {
@@ -83,7 +83,13 @@ func main() {
 		panic(err.Error())
 	}
 
-	createNamespace(clientset)
+	_, err = clientset.CoreV1().Namespaces().Get(options.Namespace, metav1.GetOptions{})
+	if err != nil {
+		fmt.Printf("Namespace %s not found, creating...\n", options.Namespace)
+		createNamespace(clientset)
+	} else {
+		fmt.Printf("Namespace already exists, creating rolebinding...\n")
+	}
 	createRoleBinding(clientset)
 
 }
