@@ -17,7 +17,7 @@ import (
 
 var options struct {
 	Verbose    []bool `short:"v" long:"verbose" description:"Show verbose debug information"`
-	Namespace  string `short:"n" long:"namespace" description:"Namespace to create"`
+	Namespace  string `short:"n" long:"namespace" description:"Namespace to create" required:"true"`
 	Kubeconfig string `short:"k" long:"kubeconfig" description:"absolute path to the kubeconfig file (default: ~/.kube/config)"`
 	Username   string `short:"u" long:"username" description:"User to add to namespace" required:"true"`
 }
@@ -65,7 +65,12 @@ func createRoleBinding(clientset *kubernetes.Clientset) {
 }
 
 func main() {
-	flags.Parse(&options)
+	parser := flags.NewParser(&options, flags.Default)
+	_, err := parser.Parse()
+	if err != nil {
+		parser.WriteHelp(os.Stderr)
+		os.Exit(1)
+	}
 	if options.Kubeconfig == "" {
 		home := homeDir()
 		options.Kubeconfig = filepath.Join(home, ".kube", "config")
