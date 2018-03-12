@@ -65,7 +65,12 @@ func createRoleBinding(clientset *kubernetes.Clientset) {
 }
 
 func main() {
-	flags.Parse(&options)
+	parser := flags.NewParser(&options, flags.Default)
+	_, err := parser.Parse()
+	if err != nil {
+		parser.WriteHelp(os.Stderr)
+		os.Exit(1)
+	}
 	if options.Kubeconfig == "" {
 		home := homeDir()
 		options.Kubeconfig = filepath.Join(home, ".kube", "config")
