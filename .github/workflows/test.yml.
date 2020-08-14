@@ -1,0 +1,23 @@
+on: push 
+name: go-check
+jobs:
+  test:
+    env:
+      GOPATH: ${{ github.workspace }}
+    strategy:
+      matrix:
+        go-version: [1.14.x]
+        platform: [macos-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+    - name: Install Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: ${{ matrix.go-version }}
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        path: ./src/github.com/heathseals/k8s-provisioner
+    - name: Build
+      run: go build ./src/github.com/heathseals/k8s-provisioner
