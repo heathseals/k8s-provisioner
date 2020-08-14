@@ -16,10 +16,11 @@ import (
 )
 
 var options struct {
-	Verbose    []bool `short:"v" long:"verbose" description:"Show verbose debug information"`
-	Namespace  string `short:"n" long:"namespace" description:"Namespace to create" required:"true"`
-	Kubeconfig string `short:"k" long:"kubeconfig" description:"absolute path to the kubeconfig file (default: ~/.kube/config)"`
-	Username   string `short:"u" long:"username" description:"User to add to namespace" required:"true"`
+	Verbose     []bool `short:"v" long:"verbose" description:"Show verbose debug information"`
+	Namespace   string `short:"n" long:"namespace" description:"Namespace to create" required:"true"`
+	Kubeconfig  string `short:"k" long:"kubeconfig" description:"absolute path to the kubeconfig file (default: ~/.kube/config)"`
+	Username    string `short:"u" long:"username" description:"User to add to namespace" required:"true"`
+	ClusterRole string `short:"cr" long:"clusterrole" description:"ClusterRole to apply to the Rolebinding" default:"view"`
 }
 
 func homeDir() string {
@@ -53,7 +54,7 @@ func createRoleBinding(clientset *kubernetes.Clientset) {
 		},
 		RoleRef: rbacv1.RoleRef{
 			Kind: "ClusterRole",
-			Name: "admin",
+			Name: options.ClusterRole,
 		},
 	}
 
