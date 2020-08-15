@@ -19,5 +19,7 @@ jobs:
       with:
         fetch-depth: 0
         path: ./src/github.com/heathseals/k8s-provisioner
+    - name: Dependencies
+      run: go get k8s.io/client-go github.com/jessevdk/go-flags
     - name: Build
       run: go build ./src/github.com/heathseals/k8s-provisioner
